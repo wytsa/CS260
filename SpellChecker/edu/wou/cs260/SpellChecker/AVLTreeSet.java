@@ -12,7 +12,7 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 * a mechanical method 
 	 * a method to find and set the balance value of the nodes
 	 */
-	protected int balVal(Node temp){
+	protected int balanceValue(Node temp){
 		if(temp == null){
 			return 0;
 		}
@@ -91,34 +91,43 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 */
 	private int balanceNode(Node subTree) {
 		// check to see if the tree/node is balanced
-		if(balVal(subTree) >= -1 && balVal(subTree) <= 1){
+		if(balanceValue(subTree) == -1 || balanceValue(subTree) == 0 || balanceValue(subTree) == 1){
+			// re-calculate the height of the node
 			return calcHeight(subTree);
 		}
 		// check to see if the tree is heavy on the left
-		else if(balVal(subTree) < -1){
+		else if(balanceValue(subTree) < -1){
 			// check the balance of the lChild to the heavy node
-			if(balVal(subTree.lChild) < 1){
+			if(balanceValue(subTree.lChild) < 1){
+				// run a single right rotate
 				singleRight(subTree);
+				// re-calculate the height of the node
 				return calcHeight(subTree);
 			}
 			// check the balance of the rChild to the heavy node
-			else if(balVal(subTree.rChild) > 0){
+			else if(balanceValue(subTree.rChild) > 0){
+				// run a double right rotate
 				doubleRight(subTree);
+				// re-calculate the height of the node
 				return calcHeight(subTree);
 			}
 			// does nothing but allows for the previous test
 			else{return 0;}
 		}
 		// check to see if the tree is heavy on the right
-		else if(balVal(subTree) > 1){
+		else if(balanceValue(subTree) > 1){
 			// check the balance of the rChild to the heavy node
-			if(balVal(subTree.rChild) > 1){
+			if(balanceValue(subTree.rChild) > 1){
+				// run a single left rotate
 				singleLeft(subTree);
+				// re-calculate the height of the node
 				return calcHeight(subTree);
 			}
 			// check the balance of the lChild to the heavy node
-			else if(balVal(subTree.lChild) < -1){
+			else if(balanceValue(subTree.lChild) < -1){
+				// run a double left rotate
 				doubleLeft(subTree);
+				// re-calculate the height of the node
 				return calcHeight(subTree);
 			}
 			// does nothing but allows for the previous test
