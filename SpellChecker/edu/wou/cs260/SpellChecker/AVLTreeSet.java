@@ -90,31 +90,41 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 * my attempt to make a method to chose how to balance the tree
 	 */
 	private int balanceNode(Node subTree) {
+		// check to see if the tree/node is balanced
 		if(balVal(subTree) >= -1 && balVal(subTree) <= 1){
 			return calcHeight(subTree);
 		}
+		// check to see if the tree is heavy on the left
 		else if(balVal(subTree) < -1){
-			//if(balVal(subTree.lChild) < 1){
+			// check the balance of the lChild to the heavy node
+			if(balVal(subTree.lChild) < 1){
 				singleRight(subTree);
 				return calcHeight(subTree);
-			//}
-			//else{// if(balVal(subTree.rChild) > 0){
-			//	doubleRight(subTree);
-			//	return calcHeight(subTree);
-			//}
+			}
+			// check the balance of the rChild to the heavy node
+			else if(balVal(subTree.rChild) > 0){
+				doubleRight(subTree);
+				return calcHeight(subTree);
+			}
+			// does nothing but allows for the previous test
+			else{return 0;}
 		}
+		// check to see if the tree is heavy on the right
 		else if(balVal(subTree) > 1){
-			//if(balVal(subTree.rChild) > 1){
+			// check the balance of the rChild to the heavy node
+			if(balVal(subTree.rChild) > 1){
 				singleLeft(subTree);
 				return calcHeight(subTree);
-			//}
-			//else{//if(balVal(subTree.lChild) < -1){
-			//	doubleLeft(subTree);
-			//	return calcHeight(subTree);
-			//}
+			}
+			// check the balance of the lChild to the heavy node
+			else if(balVal(subTree.lChild) < -1){
+				doubleLeft(subTree);
+				return calcHeight(subTree);
+			}
+			// does nothing but allows for the previous test
+			else{return 0;}
 		}
-		else{
-			return 0;
-		}
+		// does nothing but allows for the previous test
+		else{return 0;}
 	}
 }
