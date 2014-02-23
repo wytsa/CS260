@@ -126,7 +126,7 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 			subTree.rChild = addHelper(subTree.rChild, arg0);
 		}
 		// does not seem to be calling the next lines method or not working
-		return balance(subTree);
+		return  balance(subTree);
 	}
 
 	/*
