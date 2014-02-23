@@ -13,9 +13,6 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 * @see edu.wou.cs260.SpellChecker.BSTreeSet#getHeight(edu.wou.cs260.SpellChecker.BSTreeSet.Node)
 	 */
 	protected int getHeight(Node subTree){
-		//if(subTree == null){
-		//	return -1;
-		//}
 		if(subTree.lChild == null && subTree.rChild == null){
 			return 0;
 		}
@@ -54,10 +51,10 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		if(subTree.lChild == null && subTree.rChild == null){
 			return 0;
 		}
-		else if(subTree.lChild == null){
+		else if(subTree.lChild == null && subTree.rChild != null){
 			return (subTree.rChild.height - 0);
 		}
-		else if(subTree.rChild == null){
+		else if(subTree.lChild != null && subTree.rChild == null){
 			return (0 - subTree.lChild.height);
 		}
 		else{
@@ -75,6 +72,8 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		temp.rChild = current;
 		fixHeight(current);
 		fixHeight(temp);
+		//current.height = getHeight(current);
+		//temp.height = getHeight(temp);
 		return temp;
 	}
 	
@@ -97,6 +96,8 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		temp.lChild = current;
 		fixHeight(current);
 		fixHeight(temp);
+		//current.height = getHeight(current);
+		//temp.height = getHeight(temp);
 		return temp;
 	}
 	
@@ -124,7 +125,6 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		else{// go right
 			subTree.rChild = addHelper(subTree.rChild, arg0);
 		}
-		//fixHeight(subTree);
 		// does not seem to be calling the next lines method or not working
 		return balance(subTree);
 	}
@@ -150,14 +150,14 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	
 	protected Node lBalance(Node subTree){
 		// check the balance of the lChild to the heavy node
-		//if(getBalanceVal(subTree.lChild) < 1){
+		if(getBalanceVal(subTree.lChild) < 1){
 			return singleRotateRight(subTree);// run a single right rotate
-		//}
+		}
 		// check the balance of the rChild to the heavy node
-		//if(getBalanceVal(subTree.rChild) > 0){
-		//	return doubleRotateRight(subTree);// run a double right rotate
-		//}
-		//else{return subTree;}// does nothing but allows for the previous test
+		if(getBalanceVal(subTree.rChild) > 0){
+			return doubleRotateRight(subTree);// run a double right rotate
+		}
+		else{return subTree;}// does nothing but allows for the previous test
 	}
 	
 	protected Node rBalance(Node subTree){
