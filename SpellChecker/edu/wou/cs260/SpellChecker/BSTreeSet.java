@@ -232,7 +232,6 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	}
 	
 	class TreeIterator implements Iterator<E>{
-		// Iterator fields
 		DLList<Node> que;
 		
 		public TreeIterator(){

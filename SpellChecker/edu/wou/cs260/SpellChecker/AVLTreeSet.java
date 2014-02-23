@@ -9,15 +9,59 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	// fields
 	
 	/*
-	 * a mechanical method 
-	 * a method to find and set the balance value of the nodes
+	 * a simple method that returns the height of the node passed in
+	 * @see edu.wou.cs260.SpellChecker.BSTreeSet#getHeight(edu.wou.cs260.SpellChecker.BSTreeSet.Node)
 	 */
-	protected int balanceValue(Node temp){
-		if(temp == null){
+	protected int getHeight(Node subTree){
+		//if(subTree == null){
+		//	return -1;
+		//}
+		if(subTree.lChild == null && subTree.rChild == null){
 			return 0;
 		}
+		else if(subTree.lChild == null){
+			return (Math.max(-1, subTree.rChild.height) + 1);
+		}
+		else if(subTree.rChild == null){
+			return (Math.max(subTree.lChild.height, -1) + 1);
+		}
 		else{
-			return (getHeight(temp.rChild) - getHeight(temp.lChild));
+			return (Math.max(subTree.lChild.height, subTree.rChild.height) + 1);
+		}
+	}
+	
+	/*
+	 * a mechanical method
+	 * this method fixes the height of the node passed in
+	 */
+	private void fixHeight(Node subTree){
+		if(subTree.lChild == null && subTree.rChild == null){
+			subTree.height = 0;
+		}
+		else if(subTree.lChild == null && subTree.rChild != null){
+			subTree.height = subTree.rChild.height + 1;
+		}
+		else if(subTree.lChild != null && subTree.rChild == null){
+			subTree.height = subTree.lChild.height + 1;
+		}
+	}
+	
+	/*
+	 * a mechanical method 
+	 * a method to find and get the balance value of the node passed in
+	 */
+	private int getBalanceVal(Node subTree){
+		if(subTree.lChild == null && subTree.rChild == null){
+			return 0;
+		}
+		else if(subTree.lChild == null){
+			return (subTree.rChild.height - 0);
+		}
+		else if(subTree.rChild == null){
+			return (0 - subTree.lChild.height);
+		}
+		else{
+			return (getHeight(subTree.rChild) - getHeight(subTree.lChild));
 		}
 	}
 	
@@ -25,12 +69,12 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 * a mechanical method 
 	 * a method to do a simple rotate right
 	 */
-	protected Node singleRight(Node current){
+	private Node singleRotateRight(Node current){//singleRotateRight
 		Node temp = current.lChild;
 		current.lChild = temp.rChild;
 		temp.rChild = current;
-		current.height = calcHeight(current);
-		temp.height = calcHeight(temp);
+		fixHeight(current);
+		fixHeight(temp);
 		return temp;
 	}
 	
@@ -38,21 +82,21 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 * a mechanical method 
 	 * a method to do a double rotate right
 	 */
-	protected Node doubleRight(Node current){
-		current.lChild = singleLeft(current.lChild);
-		return singleRight(current);
+	private Node doubleRotateRight(Node current){
+		current.lChild = singleRotateLeft(current.lChild);
+		return singleRotateRight(current);
 	}
 	
 	/*
 	 * a mechanical method 
 	 * a method to do a simple rotate left
 	 */
-	protected Node singleLeft(Node current){
+	private Node singleRotateLeft(Node current){
 		Node temp = current.rChild;
 		current.rChild = temp.lChild;
 		temp.lChild = current;
-		current.height = calcHeight(current);
-		temp.height = calcHeight(temp);
+		fixHeight(current);
+		fixHeight(temp);
 		return temp;
 	}
 	
@@ -60,9 +104,9 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 * a mechanical method 
 	 * a method to do a double rotate left
 	 */
-	protected Node doubleLeft(Node current){
-		current.rChild = singleRight(current.rChild);
-		return singleLeft(current);
+	private Node doubleRotateLeft(Node current){
+		current.rChild = singleRotateRight(current.rChild);
+		return singleRotateLeft(current);
 	}
 	
 	/*
@@ -80,60 +124,51 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		else{// go right
 			subTree.rChild = addHelper(subTree.rChild, arg0);
 		}
+		//fixHeight(subTree);
 		// does not seem to be calling the next lines method or not working
-		subTree.height = balanceNode(subTree);
-		return subTree;
+		return balance(subTree);
 	}
 
 	/*
 	 * policy method
 	 * my attempt to make a method to chose how to balance the tree
 	 */
-	private int balanceNode(Node subTree) {
-		// check to see if the tree/node is balanced
-		if(balanceValue(subTree) == -1 || balanceValue(subTree) == 0 || balanceValue(subTree) == 1){
-			// re-calculate the height of the node
-			return calcHeight(subTree);
-		}
+	protected Node balance(Node subTree) {
 		// check to see if the tree is heavy on the left
-		else if(balanceValue(subTree) < -1){
-			// check the balance of the lChild to the heavy node
-			if(balanceValue(subTree.lChild) < 1){
-				// run a single right rotate
-				singleRight(subTree);
-				// re-calculate the height of the node
-				return calcHeight(subTree);
-			}
-			// check the balance of the rChild to the heavy node
-			else if(balanceValue(subTree.rChild) > 0){
-				// run a double right rotate
-				doubleRight(subTree);
-				// re-calculate the height of the node
-				return calcHeight(subTree);
-			}
-			// does nothing but allows for the previous test
-			else{return 0;}
+		if(getBalanceVal(subTree) < -1){
+			return lBalance(subTree);
 		}
 		// check to see if the tree is heavy on the right
-		else if(balanceValue(subTree) > 1){
-			// check the balance of the rChild to the heavy node
-			if(balanceValue(subTree.rChild) > 1){
-				// run a single left rotate
-				singleLeft(subTree);
-				// re-calculate the height of the node
-				return calcHeight(subTree);
-			}
-			// check the balance of the lChild to the heavy node
-			else if(balanceValue(subTree.lChild) < -1){
-				// run a double left rotate
-				doubleLeft(subTree);
-				// re-calculate the height of the node
-				return calcHeight(subTree);
-			}
-			// does nothing but allows for the previous test
-			else{return 0;}
+		else if(getBalanceVal(subTree) > 1){
+			return rBalance(subTree);
 		}
-		// does nothing but allows for the previous test
-		else{return 0;}
+		else{// nothing to do but return the balanced tree =^-^=
+			return subTree;
+		}
+		
+	}
+	
+	protected Node lBalance(Node subTree){
+		// check the balance of the lChild to the heavy node
+		//if(getBalanceVal(subTree.lChild) < 1){
+			return singleRotateRight(subTree);// run a single right rotate
+		//}
+		// check the balance of the rChild to the heavy node
+		//if(getBalanceVal(subTree.rChild) > 0){
+		//	return doubleRotateRight(subTree);// run a double right rotate
+		//}
+		//else{return subTree;}// does nothing but allows for the previous test
+	}
+	
+	protected Node rBalance(Node subTree){
+		// check the balance of the lChild to the heavy node
+		if(getBalanceVal(subTree.lChild) < 1){			
+			return singleRotateLeft(subTree);// run a single right rotate
+		}
+		// check the balance of the rChild to the heavy node
+		else if(getBalanceVal(subTree.rChild) > 0){
+			return doubleRotateLeft(subTree);// run a double right rotate
+		}
+		else{return subTree;}// does nothing but allows for the previous test
 	}
 }
