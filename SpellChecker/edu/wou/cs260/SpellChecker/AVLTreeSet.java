@@ -70,8 +70,8 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		Node temp = current.lChild;
 		current.lChild = temp.rChild;
 		temp.rChild = current;
-		fixHeight(current);
-		fixHeight(temp);
+		//fixHeight(current);
+		//fixHeight(temp);
 		//current.height = getHeight(current);
 		//temp.height = getHeight(temp);
 		return temp;
@@ -94,8 +94,8 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		Node temp = current.rChild;
 		current.rChild = temp.lChild;
 		temp.lChild = current;
-		fixHeight(current);
-		fixHeight(temp);
+		//fixHeight(current);
+		//fixHeight(temp);
 		//current.height = getHeight(current);
 		//temp.height = getHeight(temp);
 		return temp;
