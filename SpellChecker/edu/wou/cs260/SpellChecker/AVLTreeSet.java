@@ -70,10 +70,8 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		Node temp = current.lChild;
 		current.lChild = temp.rChild;
 		temp.rChild = current;
-		//fixHeight(current);
-		//fixHeight(temp);
-		//current.height = getHeight(current);
-		//temp.height = getHeight(temp);
+		fixHeight(current);
+		fixHeight(temp);
 		return temp;
 	}
 	
@@ -94,10 +92,8 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		Node temp = current.rChild;
 		current.rChild = temp.lChild;
 		temp.lChild = current;
-		//fixHeight(current);
-		//fixHeight(temp);
-		//current.height = getHeight(current);
-		//temp.height = getHeight(temp);
+		fixHeight(current);
+		fixHeight(temp);
 		return temp;
 	}
 	
@@ -126,7 +122,7 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 			subTree.rChild = addHelper(subTree.rChild, arg0);
 		}
 		// does not seem to be calling the next lines method or not working
-		return  balance(subTree);
+		return balance(subTree);
 	}
 
 	/*
@@ -139,15 +135,17 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 			return lBalance(subTree);
 		}
 		// check to see if the tree is heavy on the right
-		else if(getBalanceVal(subTree) > 1){
+		if(getBalanceVal(subTree) > 1){
 			return rBalance(subTree);
 		}
 		else{// nothing to do but return the balanced tree =^-^=
 			return subTree;
 		}
-		
 	}
 	
+	/*
+	 * 
+	 */
 	protected Node lBalance(Node subTree){
 		// check the balance of the lChild to the heavy node
 		if(getBalanceVal(subTree.lChild) < 1){
@@ -160,6 +158,9 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 		else{return subTree;}// does nothing but allows for the previous test
 	}
 	
+	/*
+	 * 
+	 */
 	protected Node rBalance(Node subTree){
 		// check the balance of the lChild to the heavy node
 		if(getBalanceVal(subTree.lChild) < 1){			
