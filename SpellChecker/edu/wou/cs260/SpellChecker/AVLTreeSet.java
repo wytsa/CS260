@@ -129,23 +129,19 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	protected Node addHelper(Node subTree, E arg0){
 		if(subTree == null){
 			size++;
-			System.out.println("added " + arg0);
-			Node temp = new Node(arg0);
-			//temp.height = 0;
-			return temp;
+			return new Node(arg0);
 		}
 		else if(subTree.item.compareTo(arg0) > 0){// go left
-			System.out.println(arg0 + " addhelper go left");
+			//System.out.println(arg0 + " addhelper go left");
 			subTree.lChild = addHelper(subTree.lChild, arg0);
 		}
 		else if(subTree.item.compareTo(arg0) < 0){// go right
-			System.out.println(arg0 + " addhelper go right");
+			//System.out.println(arg0 + " addhelper go right");
 			subTree.rChild = addHelper(subTree.rChild, arg0);
 		}
-		// does not seem to be calling the next lines method or not working
 		fixHeight(subTree);
-		System.out.println("balanceVal is " + getBalanceVal(subTree));
-		System.out.println(subTree.item + ", item has height of " + subTree.height);
+		//System.out.println("balanceVal is " + getBalanceVal(subTree));
+		//System.out.println(subTree.item + ", item has height of " + subTree.height);
 		return balance(subTree);
 	}
 
@@ -155,21 +151,21 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 */
 	protected Node balance(Node subTree) {
 		int temp = getBalanceVal(subTree);
-		System.out.println("enter balance method");
+		//System.out.println("enter balance method");
 		if(temp == 0){
 			return subTree;
 		}
 		else{
 			// check to see if the tree is heavy on the left
 			if(temp < -1){
-				System.out.println("balVal is " + temp);
-				System.out.println("go left");
+				//System.out.println("balVal is " + temp);
+				//System.out.println("go left");
 				subTree = leftSideBalance(subTree);
 			}
 			// check to see if the tree is heavy on the right
 			if(temp > 1){
-				System.out.println("balVal is " + temp);
-				System.out.println("go right");
+				//System.out.println("balVal is " + temp);
+				//System.out.println("go right");
 				subTree = rightSideBalance(subTree);
 			}
 		}
@@ -181,16 +177,16 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 */
 	protected Node leftSideBalance(Node subTree){
 		int tempLeftBalance = getBalanceVal(subTree.lChild);
-		System.out.println("enter leftSideBalance method");
-		System.out.println("balVal is " + tempLeftBalance);
+		//System.out.println("enter leftSideBalance method");
+		//System.out.println("balVal is " + tempLeftBalance);
 		// check the balance of the lChild to the heavy node
 		if(tempLeftBalance < 1){
-			System.out.println("single right");
+			//System.out.println("single right");
 			return singleRotateRight(subTree);// run a single right rotate
 		}
 		// check the balance of the rChild to the heavy node
 		else if(tempLeftBalance > 0){
-			System.out.println("double right");
+			//System.out.println("double right");
 			return doubleRotateRight(subTree);// run a double right rotate
 		}
 		else{return subTree;}// does nothing but allows for the previous test
@@ -201,16 +197,16 @@ public class AVLTreeSet<E extends Comparable<E>> extends BSTreeSet<E>{
 	 */
 	protected Node rightSideBalance(Node subTree){
 		int tempRightBalance = getBalanceVal(subTree.rChild);
-		System.out.println("enter rightSideBalance method");
-		System.out.println("balVal is " + tempRightBalance);
+		//System.out.println("enter rightSideBalance method");
+		//System.out.println("balVal is " + tempRightBalance);
 		// check the balance of the lChild to the heavy node
 		if(tempRightBalance > -1){
-			System.out.println("single left");
+			//System.out.println("single left");
 			return singleRotateLeft(subTree);// run a single right rotate
 		}
 		// check the balance of the rChild to the heavy node
 		else if(tempRightBalance < 0){
-			System.out.println("double left");
+			//System.out.println("double left");
 			return doubleRotateLeft(subTree);// run a double right rotate
 		}
 		else{return subTree;}// does nothing but allows for the previous test
