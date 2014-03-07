@@ -7,11 +7,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-//import java.lang.Math.*;
-//import java.util.NoSuchElementException;
-//import edu.wou.cs260.SpellChecker.DLList.DLLNode;
-//import edu.wou.cs260.SpellChecker.DLList.DLLIterator;
-
 /**
  * @author sam wytoski
  * 
