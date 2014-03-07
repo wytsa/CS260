@@ -18,3 +18,5 @@
 /AVLTreeSetTester.class
 /AVLTreeSetAddTester.class
 /OpenChainHashSet.class
+/OpenChainHashSetTester.class
+/OpenChainHashSet$OCHSNode.class
