@@ -5,10 +5,7 @@ package edu.wou.cs260.SpellChecker;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-
-import edu.wou.cs260.SpellChecker.DLList.DLLNode;
 
 /**
  * @author wytsa
@@ -20,9 +17,8 @@ public class OpenChainHashSet<E> implements Set<E>, CompareCount {
 	private int tableSize = 150001;
 	private int currentItems = 0;
 	private DLList<E>[] hashTable;
-	
-	//
 
+	@SuppressWarnings("unchecked")
 	public OpenChainHashSet(int tableSize) {
 		hashTable = (DLList<E>[]) new DLList[tableSize];
 	}
@@ -39,22 +35,37 @@ public class OpenChainHashSet<E> implements Set<E>, CompareCount {
 	@Override
 	public boolean add(E arg0) {
 		// TODO Auto-generated method stub
-		int index = Math.abs( arg0.hashCode( )) % tableSize;
-		OCHSNode temp = new OCHSNode(arg0);
-		if(temp.data == null){
+		boolean val = false;
+		if(arg0 == null){
 			throw new NullPointerException();
 		}
+		int index = Math.abs( arg0.hashCode( )) % tableSize;
+		if(hashTable[index] == null){
+			DLList<E> temp = new DLList<E>();
+			val = temp.add(arg0);
+			if(val == true){
+			currentItems ++;
+			hashTable[index] = temp;
+			return val;
+			}
+			else{
+				return val;
+			}			
+		}
 		else{
-			return addAddress(index, temp);
-		}		
+			DLList<E> temp = hashTable[index];
+			val = temp.add(arg0);
+			if(val == true){
+				currentItems ++;
+				hashTable[index] = temp;
+				return val;
+			}
+			else{
+				return val;
+			}
+		}
 	}
-	
-	private boolean addAddress(int index, OCHSNode temp){
 		
-		
-		return false;		
-	}
-	
 	@Override
 	public boolean addAll(Collection<? extends E> arg0) {
 		return false;
@@ -62,13 +73,27 @@ public class OpenChainHashSet<E> implements Set<E>, CompareCount {
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub		
+		currentItems = 0;
+		for(int i = 0; i < tableSize; i++){
+			if(hashTable[i] != null){
+				hashTable[i] = null;
+			}
+		}	
 	}
 
 	@Override
 	public boolean contains(Object arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		if(arg0 == null){
+			throw new NullPointerException();
+		}
+		int index = Math.abs( arg0.hashCode( )) % tableSize;
+		if(hashTable[index] == null){
+			return false;
+			}
+		else{
+			DLList<E> temp = hashTable[index];
+			return temp.contains(arg0);
+			}
 	}
 
 	@Override
@@ -94,8 +119,23 @@ public class OpenChainHashSet<E> implements Set<E>, CompareCount {
 
 	@Override
 	public boolean remove(Object arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		if(arg0 == null){
+			throw new NullPointerException();
+		}
+		int index = Math.abs( arg0.hashCode( )) % tableSize;
+		if(hashTable[index] == null){
+			return false;
+			}
+		else{
+			DLList<E> temp = hashTable[index];
+			if(temp.remove(arg0) == true){
+				currentItems --;
+				return true;
+			}
+			else{
+				return false;
+			}
+		}	
 	}
 
 	@Override
@@ -110,8 +150,7 @@ public class OpenChainHashSet<E> implements Set<E>, CompareCount {
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (currentItems);
 	}
 
 	@Override
@@ -124,32 +163,4 @@ public class OpenChainHashSet<E> implements Set<E>, CompareCount {
 		return null;
 	}
 
-	class OCHSNode {
-			    
-		OCHSNode prev;    
-		E data;    
-		OCHSNode next; 
-		
-		OCHSNode() { 
-			this(null, null, null);    
-			} 
-		
-		OCHSNode(E d) {
-			this(null, d, null);
-			}    
-		
-		OCHSNode(OCHSNode p, E d, OCHSNode n) {        
-			prev = p; 
-			data = d; 
-			next = n;    
-			}
-		
-		public E getData(){
-			return data;
-		}
-		
-		public OCHSNode getNext(){
-			return next; 
-		}
-	}
 }
