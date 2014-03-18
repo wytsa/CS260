@@ -64,27 +64,27 @@ public class DLList<E>  implements List<E>, Queue<E>, CompareCount{
 		}
 	}
 	
-	private void addHeadEmpty(DLLNode temp){
+	protected void addHeadEmpty(DLLNode temp){
 		head = temp;
 		tail = temp;
 		size = 1;
 	}
 	
-	private void addHead(DLLNode temp){
+	protected void addHead(DLLNode temp){
 		temp.next = head;
 		temp.next.prev = temp;
 		head = temp;
 		size++;
 	}
 	
-	private void addTail(DLLNode temp){
+	protected void addTail(DLLNode temp){
 		temp.prev = tail;
 		temp.prev.next = temp;
 		tail = temp;
 		size++;
 	}
 	
-	private void addGeneral(DLLNode currentNode, DLLNode temp){
+	protected void addGeneral(DLLNode currentNode, DLLNode temp){
 		currentNode.prev.next = temp;
 		temp.prev = currentNode.prev;
 		temp.next = currentNode;
@@ -309,7 +309,7 @@ public class DLList<E>  implements List<E>, Queue<E>, CompareCount{
 		}
 	}
 	
-	private DLLNode getNode(int arg0) {
+	protected DLLNode getNode(int arg0) {
 		DLLNode temp = new DLLNode();
 		if(arg0 < 0 || arg0 > size){
 			throw new IndexOutOfBoundsException();
@@ -334,7 +334,7 @@ public class DLList<E>  implements List<E>, Queue<E>, CompareCount{
 		}
 	}
 
- 	private DLLNode deleteNode(int arg0){
+	protected DLLNode deleteNode(int arg0){
 		DLLNode temp = getNode(arg0);
 		if(temp == null){
 			throw new NullPointerException();
@@ -357,19 +357,19 @@ public class DLList<E>  implements List<E>, Queue<E>, CompareCount{
 		}
 	}
  	
- 	private void deleteHead(DLLNode temp){
+	protected void deleteHead(DLLNode temp){
  		head = temp.next;
 		head.prev = null;
 		size--;
  	}
  	
- 	private void deleteTail(DLLNode temp){
+	protected void deleteTail(DLLNode temp){
  		tail = temp.prev;
 		tail.next = null;
 		size--;
  	}
  	
- 	private void deleteGeneral(DLLNode temp){
+	protected void deleteGeneral(DLLNode temp){
  		temp.prev.next = temp.next;
 		temp.next.prev = temp.prev;
 		size--;

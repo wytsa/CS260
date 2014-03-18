@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
+import edu.wou.cs260.SpellChecker.DLList.DLLNode;
+
 /**
  * @author wytsa
  * @param <E>
@@ -35,50 +37,38 @@ public class OpenChainHashSet<E> implements Set<E>, CompareCount {
 	@Override
 	public boolean add(E arg0) {
 		// TODO Auto-generated method stub
-		boolean val = false;
 		if(arg0 == null){
 			throw new NullPointerException();
 		}
-		int index = Math.abs( arg0.hashCode( )) % tableSize;
-		if(hashTable[index] == null){
-			DLList<E> temp = new DLList<E>();
-			val = temp.add(arg0);
-			if(val == true){
-			currentItems ++;
-			hashTable[index] = temp;
-			return val;
-			}
-			else{
-				return val;
-			}			
+		int index = (Math.abs(arg0.hashCode( ))) % tableSize;
+		// case empty
+		if(hashTable[index].get(0) == null){
+			DLList<E> tempList = new DLList<E>();
+			tempList.add(arg0);
+			hashTable[index] = tempList;
+			return true;
 		}
+		// case collision
 		else{
-			DLList<E> temp = hashTable[index];
-			val = temp.add(arg0);
-			if(val == true){
-				currentItems ++;
-				hashTable[index] = temp;
-				return val;
-			}
-			else{
-				return val;
-			}
-		}
+			DLList<E> tempList = hashTable[index];
+			tempList.add(arg0);
+			currentItems ++;
+			hashTable[index] = tempList;
+			return true;
+		}		
 	}
-		
+
+			
 	@Override
 	public boolean addAll(Collection<? extends E> arg0) {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
 		currentItems = 0;
-		for(int i = 0; i < tableSize; i++){
-			if(hashTable[i] != null){
-				hashTable[i] = null;
-			}
-		}	
+		hashTable = ((DLList<E>[]) new DLList[tableSize]);
 	}
 
 	@Override
@@ -87,7 +77,7 @@ public class OpenChainHashSet<E> implements Set<E>, CompareCount {
 			throw new NullPointerException();
 		}
 		int index = Math.abs( arg0.hashCode( )) % tableSize;
-		if(hashTable[index] == null){
+		if(hashTable[index].isEmpty() == true){
 			return false;
 			}
 		else{
@@ -150,7 +140,7 @@ public class OpenChainHashSet<E> implements Set<E>, CompareCount {
 
 	@Override
 	public int size() {
-		return (currentItems);
+		return currentItems;
 	}
 
 	@Override
